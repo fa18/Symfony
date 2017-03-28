@@ -1,0 +1,157 @@
+http://slamwiki.kobject.net/slam4/php/phalcon
+
+http://slamwiki.kobject.net/slam5/collaboration/git
+
+mise en place :
+http://supinfo.com/articles/single/1655-phalcon#idp1412688404
+
+lien utile :
+https://github.com/asuri0n
+
+http://semantic-ui.com/
+
+/////////QUOI Installer phpstorm,composer,
+///PHALCON
+http://slamwiki.kobject.net/slam4/php/phalcon/installation
+1)Dézipper l'archive et copier le fichier dll php_phalcon.dll dans le dossier {xamppFolder}\php\ext
+2)Dans le fichier {xamppFolder}\php\php.ini, ajouter la ligne : extension=php_phalcon.dll
+
+version phalcon doit être la même que la version PHP
+					(4 version php -64bits (x86) soit: -NTS -TS 
+							-32 bits -TS compatible xamp (portable) <-prendre ça
+								
+https://phalconphp.com/fr/download/windows
+
+
+
+sur spartacus :
+https://spartacus.iutc3.unicaen.fr/phpmyadmin/index.php?db=fabien_fontaine&token=feb8073f368bd7ff4452be1d9e914497#PMAURL:server=1&target=main.php&token=feb8073f368bd7ff4452be1d9e914497
+
+///////////Config
+////XAMP
+http://127.0.0.1/xampp/
+en local sur D:
+D:\xampp-M3301		cliquer sur : xampp-control		Démarrer Apache et Mysql
+
+//PHP MY ADMIN
+http://127.0.0.1/phpmyadmin/#PMAURL-0:index.php?db=&table=&server=1&target=&lang=fr&collation_connection=utf8mb4_general_ci&token=1445127ace0dc6867ef916df8c09cf81
+///
+	/!\ si bug dans D:/xamp/xamp.. /!\
+setup_xampp.bat
+1 
+//prendre xamp version guillaume
+
+////GIT
+configurer proxy pour git :
+ouvrir git cmd 		git config --global http.proxy http://21404369:fTNHPA45@proxy.iutc3.unicaen.fr:3128
+git clone https://github.com/fa18/s4-userManagement-0
+git clone https://github.com/fa18/phalcon-tds-FONTAINE
+(git commit)
+
+git add td1/			
+git commit -m "commit td1"
+git push
+
+http://slamwiki.kobject.net/php-rt/git
+
+
+------
+//GIT GUI
+ouvrir git gui :
+(source : https://github.com/fa18/s4-userManagement-0
+target : D:/xampp-M3301/htdocs/
+)
+open
+fa18 mdp
+commit 
+push
+
+//composer
+install -> choisir php.exe
+use proxy : 172.13.0.2
+//extraire dossier vendor dans app
+créer dossier cache dans dans dossier startup
+
+// phpMv-UI semantic ui
+http://phpmv-ui.kobject.net/
+http://api.kobject.net/phpMv-UI/
+http://semantic-ui.com/
+
+////web
+http://localhost/s4-userManagement-0/roles/index.php
+
+////Navigateur
+http://127.0.0.1/angular-tds/td1/
+http://127.0.0.1/phalcon-tds-FONTAINE/td1/
+http://127.0.0.1/phalcon-tds-FONTAINE/user-management/
+http://localhost/phpmyadmin/
+
+http://127.0.0.1/phalcon-fontaine.fabien/
+
+http://localhost/phalcon-tds-FONTAINE/startup/index/demo
+http://127.0.0.1/phalcon-tds-FONTAINE/startup/Test/postForm
+
+//DEV tools
+//modifier variable d'environnement
+set PATH=%PATH%;D:\xampp-M33011\xampp-M33011\xampp-M3301\lib\phalcon-devtools-master
+set PATH=%PATH%;D:\xampp-M33011\xampp-M33011\xampp-M3301\php
+set PATH=%PATH%;D:\xampp-M3301\php  
+set PATH=%PATH%;D:\xampp-M3301\lib\phalcon-devtools-master             
+php -v
+phalcon
+
+ Générer les modèles correspondant aux tables de la base de données :
+créer à la racine du projet ( :
+D:\xampp-M3301\htdocs\phalcon-tds-FONTAINE\startup>mkdir .phalcon
+
+créer dossier models dans app
+>phalcon all-models --get-set
+dans config changer le nom de la base
+
+
+http://127.0.0.1/phalcon-tds-FONTAINE/startup/test/changeCss
+
+phalcon project user-management
+phalcon all-models --get-set
+
+
+///COURS
+MVC 2 : un controleur principal qui va délégué à des controleurs secondaires
+Controleur qui vont déterminer de ce qui va être fait de la reqûete
+->traitement de la réponse méthode+url+session
+
+Modèle s matérialise par les classes métiers qui sont les classes.php	
+
+ORM : Mappage objet relationnel entre classe métier et base de données
+
+Vue : partie affichage + possibilité de soumettre une nouvelle requête ex : bouton ok
+
+norme PSR : automatiser les imports, associer les espace de noms à la hiérachie sur disque
+
+
+
+///URL par défaut
+http://www.domaine.zone/après ce qui est analysé par le site en question pour déterminé la réponse
+http://www.domaine.zone/	appelle l'index
+On fait appel à un controleur pas à un fichier
+
+////Demarche de projet
+
+//phase d'initialisation
+-creation d squelette avec devtools
+-configuration	
+  app/config/config.php
+	/service.php : gere l'ensemble des injections de dependances de service au sein de phalcon (gestion url,$view..)
+	/loader.php : integre la configuration
+-generation classe métiers (devtools)
+	has many : relation de un à plusieur, une association (domaine) peut avoir des sous (domaine)
+	alias => Rubriques : on peut faire $domaines->getRubriques()
+  ->Vérif/ajustement relation
+
+PSR4
+//avancement projet
+-on commence toujours par le controlleur et l'action correspondantes (puis modele et vue) sinon pas d'affichage
+	volt : moteur de template
+
+
+//debug // reseau // double click // parametres
