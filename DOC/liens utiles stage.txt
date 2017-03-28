@@ -47,7 +47,14 @@ psw : NQfUFcrT6G1O
 	générer un nouveau bundle est : php bin/console generate:bundle
 	vider le cache : php bin/console cache:clear --env=prod
 	creer bdd : php bin/console doctrine:database:create  (saisir avant champs dans parameters.yml)
+
 	génération entité : php bin/console doctrine:generate:entity
+	générer table : php bin/console doctrine:schema:update --dump-sql
+	confirmer la requête : php bin/console doctrine:schema:update --force
+	générer getter/setter : php bin/console doctrine:generate:entities OCPlatformBundle:Advert
+	A FAIRE A CHAQUE MODIF :
+	enregistrer schema en bdd : php bin/console doctrine:schema:update --dump-sql
+	php bin/console doctrine:schema:update --force
 	
 	//controller
 	récupérer le contenu d'un template est la méthode : $this->get('templating')->render()
@@ -76,5 +83,5 @@ http://localhost/Symfony/web/app_dev.php/platform/add -> redirige avec message f
 http://localhost/Symfony/web/app_dev.php/platform/1
 
 Arrêter à : 
-https://openclassrooms.com/courses/developpez-votre-site-web-avec-le-framework-symfony/les-controleurs-avec-symfony
-Manipuler la session
+https://openclassrooms.com/courses/developpez-votre-site-web-avec-le-framework-symfony/manipuler-ses-entites-avec-doctrine2-1
+Doctrine simplifie la vie
