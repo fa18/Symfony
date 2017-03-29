@@ -14,7 +14,7 @@ class Application
 {
     //@ORM\JoinColumn(nullable=false) : pour interdire la création d'une candidature sans annonce
     /**
-     * @ORM\ManyToOne(targetEntity="OC\PlatformBundle\Entity\Advert")
+     * @ORM\ManyToOne(targetEntity="OC\PlatformBundle\Entity\Advert", inversedBy="applications")
      * @ORM\JoinColumn(nullable=false)
      */
     private $advert;

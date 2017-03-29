@@ -4,6 +4,7 @@
 //relation *-* : Entite propriétaire de Category, ar on plus tendance à récupérer la category à partir de l'annonce
 
 //Advert One-To-Many  AdvertSkill Many-To-One  Skill
+//bidirection proprietaire d'aplication
 namespace OC\PlatformBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -84,6 +85,12 @@ class Advert
      * @ORM\JoinTable(name="oc_advert_category")
      */
     private $categories;
+
+    // pour relation bidirectionelle
+    /**
+     * @ORM\OneToMany(targetEntity="OC\PlatformBundle\Entity\Application", mappedBy="advert")
+     */
+    private $applications; // Notez le « s », une annonce est liée à plusieurs candidatures
 
     /**
      * Get id
@@ -274,4 +281,44 @@ class Advert
         //on récupère une liste de catégories ici
     }
     //pas de setters comme référence
+
+    /**
+     * Add application
+     *
+     * @param \OC\PlatformBundle\Entity\Application $application
+     *
+     * @return Advert
+     */
+    public function addApplication(Application $application)
+    {
+        $this->applications[] = $application;
+
+        // On lie l'annonce à la candidature
+        $application->setAdvert($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove application
+     *
+     * @param \OC\PlatformBundle\Entity\Application $application
+     */
+    public function removeApplication(Application $application)
+    {
+        $this->applications->removeElement($application);
+
+        // Et si notre relation était facultative (nullable=true, ce qui n'est pas notre cas ici attention) :
+        // $application->setAdvert(null);
+    }
+
+    /**
+     * Get applications
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getApplications()
+    {
+        return $this->applications;
+    }
 }
