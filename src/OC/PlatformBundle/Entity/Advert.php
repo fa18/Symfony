@@ -1,14 +1,16 @@
 <?php
-//Entite proprietaire d'image, car on plus tendance à récupérer l'image à partir de l'annonce que l'inverse
-//Entite inverse d'Application
+//relation 1-1 : Entite proprietaire d'image, car on plus tendance à récupérer l'image à partir de l'annonce que l'inverse
+//relation 1-* : Entite inverse d'Application
+//relation *-* : Entite propriétaire de Category, ar on plus tendance à récupérer la category à partir de l'annonce
 namespace OC\PlatformBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Advert
  *
- * @ORM\Table(name="advert")
+ * @ORM\Table(name="oc_advert")
  * @ORM\Entity(repositoryClass="OC\PlatformBundle\Repository\AdvertRepository")
  */
 class Advert
@@ -20,8 +22,12 @@ class Advert
     {
         // Par défaut, la date de l'annonce est la date d'aujourd'hui
         $this->date = new \Datetime();
+        $this->categories = new ArrayCollection();
     }
-    
+    // Comme la propriété $categories doit être un ArrayCollection,
+    // On doit la définir dans un constructeur :
+
+
     /**
      * @ORM\Column(name="published", type="boolean")
      */
@@ -43,7 +49,7 @@ class Advert
      */
     private $date;
 
-
+    // relation 1-1 : pas un attribut mais une reference pour accéder à la classe image
     /**
      * @ORM\OneToOne(targetEntity="OC\PlatformBundle\Entity\Image", cascade={"persist"})
      */
@@ -70,6 +76,12 @@ class Advert
      */
     private $content;
 
+    // relation *-*
+    /**
+     * @ORM\ManyToMany(targetEntity="OC\PlatformBundle\Entity\Category", cascade={"persist"})
+     * @ORM\JoinTable(name="oc_advert_category")
+     */
+    private $categories;
 
     /**
      * Get id
@@ -224,4 +236,40 @@ class Advert
     {
         return $this->image;
     }
+
+    /**
+     * Add category
+     *
+     * @param \OC\PlatformBundle\Entity\Category $category
+     *
+     * @return Advert
+     */
+    public function addCategory(\OC\PlatformBundle\Entity\Category $category)
+    {
+        $this->categories[] = $category;
+
+        return $this;
+    }
+
+    /**
+     * Remove category
+     *
+     * @param \OC\PlatformBundle\Entity\Category $category
+     */
+    public function removeCategory(\OC\PlatformBundle\Entity\Category $category)
+    {
+        $this->categories->removeElement($category);
+    }
+
+    /**
+     * Get categories
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCategories()
+    {
+        return $this->categories;
+        //on récupère une liste de catégories ici
+    }
+    //pas de setters comme référence
 }

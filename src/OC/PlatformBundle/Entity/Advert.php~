@@ -1,5 +1,7 @@
 <?php
-//Entite proprietaire
+//relation 1-1 : Entite proprietaire d'image, car on plus tendance à récupérer l'image à partir de l'annonce que l'inverse
+//relation 1-* : Entite inverse d'Application
+//relation *-* : Entite propriétaire de Category, ar on plus tendance à récupérer la category à partir de l'annonce
 namespace OC\PlatformBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -42,7 +44,7 @@ class Advert
      */
     private $date;
 
-
+    // relation 1-1 : pas un attribut mais une reference pour accéder à la classe image
     /**
      * @ORM\OneToOne(targetEntity="OC\PlatformBundle\Entity\Image", cascade={"persist"})
      */
@@ -69,6 +71,11 @@ class Advert
      */
     private $content;
 
+    // relation *-*
+    /**
+     * @ORM\ManyToMany(targetEntity="OC\PlatformBundle\Entity\Category", cascade={"persist"})
+     */
+    private $categories;
 
     /**
      * Get id
@@ -198,5 +205,29 @@ class Advert
     public function getPublished()
     {
         return $this->published;
+    }
+
+    /**
+     * Set image
+     *
+     * @param \OC\PlatformBundle\Entity\Image $image
+     *
+     * @return Advert
+     */
+    public function setImage(\OC\PlatformBundle\Entity\Image $image = null)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return \OC\PlatformBundle\Entity\Image
+     */
+    public function getImage()
+    {
+        return $this->image;
     }
 }

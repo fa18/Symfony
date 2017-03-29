@@ -49,8 +49,9 @@ psw : NQfUFcrT6G1O
 	creer bdd : php bin/console doctrine:database:create  (saisir avant champs dans parameters.yml)
 
 	génération entité : php bin/console doctrine:generate:entity
+				
 	générer table : php bin/console doctrine:schema:update --dump-sql
-	confirmer la requête : php bin/console doctrine:schema:update --force
+	confirmer la requête : php bin/console doctrine:schema:update --force		    (nom entite)
 	générer getter/setter : php bin/console doctrine:generate:entities OCPlatformBundle:Advert
 	A FAIRE A CHAQUE MODIF :
 	enregistrer schema en bdd : php bin/console doctrine:schema:update --dump-sql
