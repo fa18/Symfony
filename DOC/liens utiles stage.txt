@@ -66,6 +66,9 @@ psw : NQfUFcrT6G1O
             'tag' => $tag,
         ));
 
+	// vue 
+	debug : {{ dump(advert) }}
+
 
 //serveur local : run-easyphp-devserver 
 http://127.0.0.1:1111/

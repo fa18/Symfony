@@ -4,7 +4,9 @@
 namespace OC\PlatformBundle\Controller;
 
 use OC\PlatformBundle\Entity\Advert;
+use OC\PlatformBundle\Entity\Image;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\BrowserKit\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -98,6 +100,28 @@ class AdvertController extends Controller
         // On peut ne pas définir ni la date ni la publication,
         // car ces attributs sont définis automatiquement dans le constructeur
 
+        // Création de l'entité Image
+        $image = new Image();
+        $image->setUrl('http://sdz-upload.s3.amazonaws.com/prod/upload/job-de-reve.jpg');
+        $image->setAlt('Job de rêve');
+
+        // On lie l'image à l'annonce
+        $advert->setImage($image);
+
+        // On récupère l'EntityManager
+        $em = $this->getDoctrine()->getManager();
+
+        // Étape 1 : On « persiste » l'entité
+        $em->persist($advert);
+
+        // Étape 1 bis : si on n'avait pas défini le cascade={"persist"},
+        // on devrait persister à la main l'entité $image
+        // $em->persist($image);
+
+        // Étape 2 : On déclenche l'enregistrement
+        $em->flush();
+
+
         // On récupère l'EntityManager
         $em = $this->getDoctrine()->getManager();
 
@@ -121,17 +145,24 @@ class AdvertController extends Controller
 
     public function editAction($id, Request $request)
     {
-        $advert = array(
-            'title'   => 'Recherche développpeur Symfony',
-            'id'      => $id,
-            'author'  => 'Alexandre',
-            'content' => 'Nous recherchons un développeur Symfony débutant sur Lyon. Blabla…',
-            'date'    => new \Datetime()
-        );
+        $em = $this->getDoctrine()->getManager();
 
-        return $this->render('OCPlatformBundle:Advert:edit.html.twig', array(
-            'advert' => $advert
-        ));
+        // On récupère l'annonce
+        $advert = $em->getRepository('OCPlatformBundle:Advert')->find($id);
+
+        // On modifie l'URL de l'image par exemple
+        $advert->getImage()->setUrl('test.png');
+        $advert->getImage()->setAlt('image test');
+
+        // On n'a pas besoin de persister l'annonce ni l'image.
+        // Rappelez-vous, ces entités sont automatiquement persistées car
+        // on les a récupérées depuis Doctrine lui-même
+
+        $em->persist($advert);
+        // On déclenche la modification
+        $em->flush();
+
+        return $this->render('OCPlatformBundle:Advert:edit.html.twig', array('advert' => $advert));
     }
 
     public function deleteAction($id)
