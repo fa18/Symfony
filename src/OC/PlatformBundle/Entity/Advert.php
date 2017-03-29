@@ -1,5 +1,6 @@
 <?php
-//Entite proprietaire
+//Entite proprietaire d'image, car on plus tendance à récupérer l'image à partir de l'annonce que l'inverse
+//Entite inverse d'Application
 namespace OC\PlatformBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;

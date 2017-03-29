@@ -1,5 +1,5 @@
 <?php
-//Entite inverse
+//Entite inverse d'advert
 namespace OC\PlatformBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
