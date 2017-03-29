@@ -2,6 +2,8 @@
 //relation 1-1 : Entite proprietaire d'image, car on plus tendance à récupérer l'image à partir de l'annonce que l'inverse
 //relation 1-* : Entite inverse d'Application
 //relation *-* : Entite propriétaire de Category, ar on plus tendance à récupérer la category à partir de l'annonce
+
+//Advert One-To-Many  AdvertSkill Many-To-One  Skill
 namespace OC\PlatformBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;

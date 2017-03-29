@@ -18,6 +18,18 @@
         </p>
     {% endif %}
 
+    {{ dump(listAdvertSkills) }}
+    {% if listAdvertSkills|length > 0 %}
+        <div>
+            Cette annonce requiert les compétences suivantes :
+            <ul>
+                {% for advertSkill in listAdvertSkills %}
+                    <li>{{ advertSkill.skill.name }} : niveau {{ advertSkill.level }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
     <div class="well">
         {% if advert.image is not null %}
             <img src="{{ advert.image.url }}" alt="{{ advert.image.alt }}">

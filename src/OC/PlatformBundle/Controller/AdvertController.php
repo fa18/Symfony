@@ -4,6 +4,7 @@
 namespace OC\PlatformBundle\Controller;
 
 use OC\PlatformBundle\Entity\Advert;
+use OC\PlatformBundle\Entity\AdvertSkill;
 use OC\PlatformBundle\Entity\Application;
 use OC\PlatformBundle\Entity\Image;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -73,26 +74,35 @@ class AdvertController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         // On récupère l'annonce $id
-        $advert = $em->getRepository('OCPlatformBundle:Advert')->find($id);
+        $advert = $em
+            ->getRepository('OCPlatformBundle:Advert')
+            ->find($id);
 
         if (null === $advert) {
-            throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
+            throw new NotFoundHttpException("L'annonce d'id " . $id . " n'existe pas.");
         }
 
-        // On récupère la liste des candidatures de cette annonce
+        // On avait déjà récupéré la liste des candidatures
         $listApplications = $em
             ->getRepository('OCPlatformBundle:Application')
-            ->findBy(array('advert' => $advert))
-        ;
+            ->findBy(array('advert' => $advert));
+
+        // On récupère maintenant la liste des AdvertSkill
+        $listAdvertSkills = $em
+            ->getRepository('OCPlatformBundle:AdvertSkill')
+            ->findBy(array('advert' => $advert));
 
         return $this->render('OCPlatformBundle:Advert:view.html.twig', array(
-            'advert'           => $advert,
-            'listApplications' => $listApplications
+            'advert' => $advert,
+            'listApplications' => $listApplications,
+            'listAdvertSkills' => $listAdvertSkills
         ));
     }
 
     public function addAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
+
         // Création de l'entité
         $advert = new Advert();
         $advert->setTitle('Recherche développeur Symfony.');
@@ -101,6 +111,37 @@ class AdvertController extends Controller
         // On peut ne pas définir ni la date ni la publication,
         // car ces attributs sont définis automatiquement dans le constructeur
 
+        //relation 1-*-1
+        // On récupère toutes les compétences possibles
+
+        $listSkills = $em->getRepository('OCPlatformBundle:Skill')->findAll();
+
+        // Pour chaque compétence
+        foreach ($listSkills as $skill) {
+            // On crée une nouvelle « relation entre 1 annonce et 1 compétence »
+            $advertSkill = new AdvertSkill();
+
+            // On la lie à l'annonce, qui est ici toujours la même
+            $advertSkill->setAdvert($advert);
+            // On la lie à la compétence, qui change ici dans la boucle foreach
+            $advertSkill->setSkill($skill);
+
+            // Arbitrairement, on dit que chaque compétence est requise au niveau 'Expert'
+            $advertSkill->setLevel('Expert');
+
+            // Et bien sûr, on persiste cette entité de relation, propriétaire des deux autres relations
+            $em->persist($advertSkill);
+        }
+
+        // Doctrine ne connait pas encore l'entité $advert. Si vous n'avez pas défini la relation AdvertSkill
+        // avec un cascade persist (ce qui est le cas si vous avez utilisé mon code), alors on doit persister $advert
+        $em->persist($advert);
+
+        // On déclenche l'enregistrement
+        $em->flush();
+        ////
+
+        //relation 1-*
         // Création d'une première candidature
         $application1 = new Application();
         $application1->setAuthor('Marine');
@@ -131,7 +172,9 @@ class AdvertController extends Controller
 
         // Étape 2 : On « flush » tout ce qui a été persisté avant
         $em->flush();
+        ///
 
+        //relation 1-1
         // Création de l'entité Image
         $image = new Image();
         $image->setUrl('http://sdz-upload.s3.amazonaws.com/prod/upload/job-de-reve.jpg');
