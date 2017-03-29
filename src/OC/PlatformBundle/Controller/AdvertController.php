@@ -65,11 +65,24 @@ class AdvertController extends Controller
     }
 
 
-    public function viewAction()
+    public function viewAction($id)
     {
-        $advert = new Advert;
-        $advert->setContent("Recherche développeur Symfony3.");
+        // On récupère le repository
+        $repository = $this->getDoctrine()
+            ->getManager()
+            ->getRepository('OCPlatformBundle:Advert')
+        ;
 
+        // On récupère l'entité correspondante à l'id $id
+        $advert = $repository->find($id);
+
+        // $advert est donc une instance de OC\PlatformBundle\Entity\Advert
+        // ou null si l'id $id  n'existe pas, d'où ce if :
+        if (null === $advert) {
+            throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
+        }
+
+        // Le render ne change pas, on passait avant un tableau, maintenant un objet
         return $this->render('OCPlatformBundle:Advert:view.html.twig', array(
             'advert' => $advert
         ));
