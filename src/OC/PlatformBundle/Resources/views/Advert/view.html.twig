@@ -20,6 +20,13 @@
 
     <div class="applications">
         {{ dump(listApplications) }}
+        {% if listApplications is not empty %}
+            {% for application in listApplications %}
+                <h3>{{ application.author }} :</h3>
+                {{ application.content }}</div>
+            {% endfor %}
+
+        {% endif %}
     </div>
 
     <p>
