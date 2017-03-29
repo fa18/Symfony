@@ -69,7 +69,10 @@ psw : NQfUFcrT6G1O
 
 	// vue 
 	debug : {{ dump(advert) }}
-
+	
+	//Doctrine : http://symfony.com/doc/current/bundles/DoctrineFixturesBundle/index.html
+	//si pb de variable globale après composer
+	app_webmaster: Fabien
 
 //serveur local : run-easyphp-devserver 
 http://127.0.0.1:1111/
@@ -85,6 +88,8 @@ http://localhost/Symfony/web/platform/good-bye
 
 http://localhost/Symfony/web/app_dev.php/platform/add -> redirige avec message flash
 http://localhost/Symfony/web/app_dev.php/platform/1
+
+
 
 Arrêter à : 
 https://openclassrooms.com/courses/developpez-votre-site-web-avec-le-framework-symfony/manipuler-ses-entites-avec-doctrine2-1
