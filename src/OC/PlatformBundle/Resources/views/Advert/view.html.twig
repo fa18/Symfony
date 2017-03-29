@@ -9,6 +9,14 @@
 
     <h2>{{ advert.title }}</h2>
     <i>Par {{ advert.author }}, le {{ advert.date|date('d/m/Y') }}</i>
+    {% if not advert.categories.empty %}
+        <p>
+            Cette annonce est parue dans les catégories suivantes :</br>
+            {% for category in advert.categories %}
+                {{ category.name }}{% if not loop.last %}, {% endif %}
+            {% endfor %}
+        </p>
+    {% endif %}
 
     <div class="well">
         {% if advert.image is not null %}
