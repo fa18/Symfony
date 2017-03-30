@@ -99,5 +99,5 @@ http://localhost/Symfony/web/app_dev.php/platform/1
 
 
 Arrêter à : 
-https://openclassrooms.com/courses/developpez-votre-site-web-avec-le-framework-symfony/recuperer-ses-entites-avec-doctrine2-1
-Les méthodes de récupération personnelles
+https://openclassrooms.com/courses/developpez-votre-site-web-avec-le-framework-symfony/creer-des-formulaires-avec-symfony
+Gestion de la soumission d'un formulaire

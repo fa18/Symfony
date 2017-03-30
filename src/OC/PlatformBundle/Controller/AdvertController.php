@@ -3,14 +3,22 @@
 
 namespace OC\PlatformBundle\Controller;
 
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use OC\PlatformBundle\Entity\Advert;
 use OC\PlatformBundle\Entity\AdvertSkill;
 use OC\PlatformBundle\Entity\Application;
 use OC\PlatformBundle\Entity\Image;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\BrowserKit\Response;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+
+
 
 
 class AdvertController extends Controller
@@ -104,7 +112,7 @@ class AdvertController extends Controller
             'listAdvertSkills' => $listAdvertSkills
         ));
     }
-
+    /*
     public function addAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
@@ -154,7 +162,7 @@ class AdvertController extends Controller
         $application1->setContent("J'ai toutes les qualites requises.");
         /*$time = strtotime('10/16/2003');
         $newformat = date('Y-m-d',$time);
-        $application1->setDate($newformat);*/
+        $application1->setDate($newformat);/
 
         // Création d'une deuxième candidature par exemple
         $application2 = new Application();
@@ -212,6 +220,34 @@ class AdvertController extends Controller
 
         // Si on n'est pas en POST, alors on affiche le formulaire
         return $this->render('OCPlatformBundle:Advert:add.html.twig', array('advert' => $advert));
+    }*/
+    public function addAction(Request $request)
+    {
+        // On crée un objet Advert
+        $advert = new Advert();
+
+        // On crée le FormBuilder grâce au service form factory
+        $formBuilder = $this->get('form.factory')->createBuilder(FormType::class, $advert);
+
+        // On ajoute les champs de l'entité que l'on veut à notre formulaire
+        $formBuilder
+            ->add('date',      DateType::class)
+            ->add('title',     TextType::class)
+            ->add('content',   TextareaType::class)
+            ->add('author',    TextType::class)
+            ->add('published', CheckboxType::class)
+            ->add('save',      SubmitType::class)
+        ;
+        // Pour l'instant, pas de candidatures, catégories, etc., on les gérera plus tard
+
+        // À partir du formBuilder, on génère le formulaire
+        $form = $formBuilder->getForm();
+
+        // On passe la méthode createView() du formulaire à la vue
+        // afin qu'elle puisse afficher le formulaire toute seule
+        return $this->render('OCPlatformBundle:Advert:add.html.twig', array(
+            'form' => $form->createView(),
+        ));
     }
 
     public function editAction($id, Request $request)

@@ -41,10 +41,9 @@
 
     <h2>Liste des annonces</h2>
 
-
     <ul>
-        {{ dump(listAdverts) }}</br>
         {% for advert in listAdverts %}
+            {{ dump(advert) }}
             <li>
                 <a href="{{ path('oc_platform_view', {'id': advert.id}) }}">
                     {{ advert.title }}
