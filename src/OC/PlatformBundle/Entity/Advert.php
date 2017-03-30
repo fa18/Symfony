@@ -321,4 +321,6 @@ class Advert
     {
         return $this->applications;
     }
+
+
 }

@@ -7,6 +7,8 @@ http://twig.sensiolabs.org/doc/2.x/filters/index.html
 http://twig.sensiolabs.org/doc/2.x/tests/index.html
 
 http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/index.html
+https://secure.php.net/manual/fr/language.oop5.magic.php
+Query builder :https://openclassrooms.com/courses/developpez-votre-site-web-avec-le-framework-symfony/recuperer-ses-entites-avec-doctrine2-1
 
 //Sombox
 http://frontend.sombox.fr/app_dev.php
@@ -92,5 +94,5 @@ http://localhost/Symfony/web/app_dev.php/platform/1
 
 
 Arrêter à : 
-https://openclassrooms.com/courses/developpez-votre-site-web-avec-le-framework-symfony/manipuler-ses-entites-avec-doctrine2-1
-Doctrine simplifie la vie
+https://openclassrooms.com/courses/developpez-votre-site-web-avec-le-framework-symfony/recuperer-ses-entites-avec-doctrine2-1
+Les méthodes de récupération personnelles

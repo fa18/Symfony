@@ -41,3 +41,8 @@ oc_platform_email:
    path:      /email/{var1}/{var2}
    defaults:
         _controller: OCPlatformBundle:Advert:email
+
+oc_platform_test:
+   path:      /test
+   defaults:
+        _controller: OCPlatformBundle:Advert:test
