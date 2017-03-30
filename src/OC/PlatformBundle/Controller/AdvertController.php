@@ -36,17 +36,14 @@ class AdvertController extends Controller
     public function indexAction($page)
     {
         $mailer = $this->container->get('mailer');
-        /*if ($page < 1) {
+        if ($page < 1) {
             throw new NotFoundHttpException('Page "'.$page.'" inexistante.');
-        }*/
+        }
 
-        /*$repository = $this
-            ->getDoctrine()
-            ->getManager()
-            ->getRepository('OCPlatformBundle:Advert')
-        ;
+        //il faudrait utiliser un paramètre, et y accéder via $this->container->getParameter('nb_per_page')
+        $nbPerPage = 5;
 
-        $listAdverts = $repository->myFindAll();*/
+
         // Dans indexAction, on utilise maintenant getAdverts et non plus findAll :
         $listAdverts = $this->getDoctrine()
             ->getManager()
@@ -57,13 +54,23 @@ class AdvertController extends Controller
         $allAdverts = $this->getDoctrine()
             ->getManager()
             ->getRepository('OCPlatformBundle:Advert')
-            ->getAllAdverts()
+            ->getAllAdverts($page, $nbPerPage)
         ;
+        // On calcule le nombre total de pages grâce au count($listAdverts) qui retourne le nombre total d'annonces
+        $nbPages = ceil(count($allAdverts) / $nbPerPage);
+
+        // Si la page n'existe pas, on retourne une 404
+       /* if ($page > $nbPages) {
+            throw $this->createNotFoundException("La page ".$page." n'existe paS.");
+        }*/
+
 
         // Et modifiez le 2nd argument pour injecter notre liste
         return $this->render('OCPlatformBundle:Advert:index.html.twig', array(
             'listAdverts' => $listAdverts,
-            'allAdverts' => $allAdverts
+            'allAdverts' => $allAdverts,
+            'nbPages'     => $nbPages,
+            'page'        => $page
         ));
     }
 
