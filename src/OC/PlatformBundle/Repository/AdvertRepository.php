@@ -184,4 +184,34 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
             ;
 
     }
+
+    // récupérer les entités triées par date
+    public function getAllAdverts()
+    {
+        $query = $this->createQueryBuilder('a')
+            ->orderBy('a.date', 'DESC')
+            ->getQuery()
+
+        ;
+
+        return $query->getResult();
+    }
+
+    public function getAdverts()
+    {
+        $query = $this->createQueryBuilder('a')
+
+            // Jointure sur l'attribut image
+                ->innerJoin('a.image','img')
+
+            // Jointure sur l'attribut categories
+                ->innerJoin('a.categories','cat')
+
+                 ->orderBy('a.date', 'DESC')
+                 ->getQuery()
+
+        ;
+
+        return $query->getResult();
+    }
 }

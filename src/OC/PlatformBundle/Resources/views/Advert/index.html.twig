@@ -9,9 +9,31 @@
 
 {% block ocplatform_body %}
 
-    <h2>Liste des annonces</h2>
+    <h2>Liste de toutes les  annonces</h2>
 
     <ul>
+        {{ dump(allAdverts) }}</br>
+        {% for advert in allAdverts %}
+            <li>
+                <a href="{{ path('oc_platform_view', {'id': advert.id}) }}">
+                    {{ advert.title }}
+                </a>
+                par {{ advert.author }},
+                le {{ advert.date|date('d/m/Y') }}
+                {% if advert.nbApplications != 0 %}
+                    {{ advert.nbApplications }} candidature{% if advert.nbApplications > 1 %}s{% endif %}
+                {% endif %}
+            </li>
+        {% else %}
+            <li>Pas (encore !) d'annonces</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Liste des annonces</h2>
+
+
+    <ul>
+        {{ dump(listAdverts) }}</br>
         {% for advert in listAdverts %}
             <li>
                 <a href="{{ path('oc_platform_view', {'id': advert.id}) }}">
@@ -19,6 +41,9 @@
                 </a>
                 par {{ advert.author }},
                 le {{ advert.date|date('d/m/Y') }}
+                {% if advert.nbApplications != 0 %}
+                    {{ advert.nbApplications }} candidature{% if advert.nbApplications > 1 %}s{% endif %}
+                {% endif %}
             </li>
         {% else %}
             <li>Pas (encore !) d'annonces</li>

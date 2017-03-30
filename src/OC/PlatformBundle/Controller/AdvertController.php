@@ -36,21 +36,34 @@ class AdvertController extends Controller
     public function indexAction($page)
     {
         $mailer = $this->container->get('mailer');
-        if ($page < 1) {
+        /*if ($page < 1) {
             throw new NotFoundHttpException('Page "'.$page.'" inexistante.');
-        }
+        }*/
 
-        $repository = $this
+        /*$repository = $this
             ->getDoctrine()
             ->getManager()
             ->getRepository('OCPlatformBundle:Advert')
         ;
 
-        $listAdverts = $repository->myFindAll();
+        $listAdverts = $repository->myFindAll();*/
+        // Dans indexAction, on utilise maintenant getAdverts et non plus findAll :
+        $listAdverts = $this->getDoctrine()
+            ->getManager()
+            ->getRepository('OCPlatformBundle:Advert')
+            ->getAdverts()
+        ;
+
+        $allAdverts = $this->getDoctrine()
+            ->getManager()
+            ->getRepository('OCPlatformBundle:Advert')
+            ->getAllAdverts()
+        ;
 
         // Et modifiez le 2nd argument pour injecter notre liste
         return $this->render('OCPlatformBundle:Advert:index.html.twig', array(
-            'listAdverts' => $listAdverts
+            'listAdverts' => $listAdverts,
+            'allAdverts' => $allAdverts
         ));
     }
 
