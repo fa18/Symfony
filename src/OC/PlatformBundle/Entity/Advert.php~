@@ -1,6 +1,6 @@
 <?php
 //relation 1-1 : Entite proprietaire d'image, car on plus tendance à récupérer l'image à partir de l'annonce que l'inverse
-//relation 1-* : Entite inverse d'Application
+//relation 1-* : Entite inverse d'Application (proprietaire aussi comme bidirective apres)
 //relation *-* : Entite propriétaire de Category, ar on plus tendance à récupérer la category à partir de l'annonce
 
 //Advert One-To-Many  AdvertSkill Many-To-One  Skill
@@ -15,6 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="oc_advert")
  * @ORM\Entity(repositoryClass="OC\PlatformBundle\Repository\AdvertRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Advert
 {
@@ -30,6 +31,11 @@ class Advert
     // Comme la propriété $categories doit être un ArrayCollection,
     // On doit la définir dans un constructeur :
 
+    //pour callback
+    /**
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     */
+    private $updatedAt;
 
     /**
      * @ORM\Column(name="published", type="boolean")
@@ -281,4 +287,94 @@ class Advert
         //on récupère une liste de catégories ici
     }
     //pas de setters comme référence
+
+    /**
+     * Add application
+     *
+     * @param \OC\PlatformBundle\Entity\Application $application
+     *
+     * @return Advert
+     */
+    public function addApplication(Application $application)
+    {
+        $this->applications[] = $application;
+
+        // On lie l'annonce à la candidature
+        $application->setAdvert($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove application
+     *
+     * @param \OC\PlatformBundle\Entity\Application $application
+     */
+    public function removeApplication(Application $application)
+    {
+        $this->applications->removeElement($application);
+
+        // Et si notre relation était facultative (nullable=true, ce qui n'est pas notre cas ici attention) :
+        // $application->setAdvert(null);
+    }
+
+    /**
+     * Get applications
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getApplications()
+    {
+        return $this->applications;
+    }
+
+    
+
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     *
+     * @return Advert
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function updateDate()
+    {
+        $this->setUpdatedAt(new \Datetime());
+    }
+
+    /**
+     * @ORM\Column(name="nb_applications", type="integer")
+     */
+    private $nbApplications = 0;
+
+    public function increaseApplication()
+    {
+        $this->nbApplications++;
+    }
+
+    public function decreaseApplication()
+    {
+        $this->nbApplications--;
+    }
 }

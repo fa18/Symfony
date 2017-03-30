@@ -15,6 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="oc_advert")
  * @ORM\Entity(repositoryClass="OC\PlatformBundle\Repository\AdvertRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Advert
 {
@@ -30,6 +31,11 @@ class Advert
     // Comme la propriété $categories doit être un ArrayCollection,
     // On doit la définir dans un constructeur :
 
+    //pour callback
+    /**
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     */
+    private $updatedAt;
 
     /**
      * @ORM\Column(name="published", type="boolean")
@@ -322,5 +328,78 @@ class Advert
         return $this->applications;
     }
 
+    
 
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     *
+     * @return Advert
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function updateDate()
+    {
+        $this->setUpdatedAt(new \Datetime());
+    }
+
+    //pour evenement pour compter les candidatures
+    /**
+     * @ORM\Column(name="nb_applications", type="integer")
+     */
+    private $nbApplications = 0;
+
+    public function increaseApplication()
+    {
+        $this->nbApplications++;
+    }
+
+    public function decreaseApplication()
+    {
+        $this->nbApplications--;
+    }
+
+    /**
+     * Set nbApplications
+     *
+     * @param integer $nbApplications
+     *
+     * @return Advert
+     */
+    public function setNbApplications($nbApplications)
+    {
+        $this->nbApplications = $nbApplications;
+
+        return $this;
+    }
+
+    /**
+     * Get nbApplications
+     *
+     * @return integer
+     */
+    public function getNbApplications()
+    {
+        return $this->nbApplications;
+    }
 }

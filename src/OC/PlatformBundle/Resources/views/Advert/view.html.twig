@@ -18,7 +18,7 @@
         </p>
     {% endif %}
 
-    {{ dump(listAdvertSkills) }}
+
     {% if listAdvertSkills|length > 0 %}
         <div>
             Cette annonce requiert les compétences suivantes :
@@ -39,7 +39,7 @@
     </div>
 
     <div class="applications">
-        {{ dump(listApplications) }}
+
         {% if listApplications is not empty %}
             {% for application in listApplications %}
                 <h3>{{ application.author }} :</h3>

@@ -17,21 +17,18 @@ class AdvertController extends Controller
 {
 
 
-    public function menuAction()
+    public function menuAction($limit)
     {
+        $em = $this->getDoctrine()->getManager();
 
-
-        // On fixe en dur une liste ici, bien entendu par la suite
-        // on la récupérera depuis la BDD !
-        $listAdverts = array(
-            array('id' => 2, 'title' => 'Recherche développeur Symfony'),
-            array('id' => 5, 'title' => 'Mission de webmaster'),
-            array('id' => 9, 'title' => 'Offre de stage webdesigner')
+        $listAdverts = $em->getRepository('OCPlatformBundle:Advert')->findBy(
+            array(),                 // Pas de critère
+            array('date' => 'desc'), // On trie par date décroissante
+            $limit,                  // On sélectionne $limit annonces
+            0                        // À partir du premier
         );
 
         return $this->render('OCPlatformBundle:Advert:menu.html.twig', array(
-            // Tout l'intérêt est ici : le contrôleur passe
-            // les variables nécessaires au template !
             'listAdverts' => $listAdverts
         ));
     }
@@ -39,6 +36,9 @@ class AdvertController extends Controller
     public function indexAction($page)
     {
         $mailer = $this->container->get('mailer');
+        if ($page < 1) {
+            throw new NotFoundHttpException('Page "'.$page.'" inexistante.');
+        }
 
         $repository = $this
             ->getDoctrine()
@@ -91,9 +91,9 @@ class AdvertController extends Controller
 
         // Création de l'entité
         $advert = new Advert();
-        $advert->setTitle('Recherche développeur Symfony.');
-        $advert->setAuthor('Alexandre');
-        $advert->setContent("Nous recherchons un développeur Symfony débutant sur Lyon. Blabla…");
+        $advert->setTitle('Recherche formateur Symfony.');
+        $advert->setAuthor('Fabien');
+        $advert->setContent("dans le but de me former à ce framework");
         // On peut ne pas définir ni la date ni la publication,
         // car ces attributs sont définis automatiquement dans le constructeur
 
@@ -203,6 +203,14 @@ class AdvertController extends Controller
 
         if (null === $advert) {
             throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
+        }
+
+        // Ici encore, il faudra mettre la gestion du formulaire
+
+        if ($request->isMethod('POST')) {
+            $request->getSession()->getFlashBag()->add('notice', 'Annonce bien modifiée.');
+
+            return $this->redirectToRoute('oc_platform_view', array('id' => $advert->getId()));
         }
 
         // La méthode findAll retourne toutes les catégories de la base de données
