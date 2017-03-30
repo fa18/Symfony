@@ -275,7 +275,8 @@ class AdvertController extends Controller
         ));
     }
 
-    public function testAction()
+    //http://localhost/Symfony/web/app_dev.php/platform/test/10
+    public function testAction($id)
     {
         $repository = $this
             ->getDoctrine()
@@ -283,7 +284,7 @@ class AdvertController extends Controller
             ->getRepository('OCPlatformBundle:Advert')
         ;
 
-        $listAdverts = $repository->myFindAll();
+        $listAdverts = $repository->myFindOne($id);
 
 
         return $this->render('OCPlatformBundle:Advert:test.html.twig', array(
@@ -291,6 +292,87 @@ class AdvertController extends Controller
 
         ));
     }
+
+    //http://localhost/Symfony/web/app_dev.php/platform/search/alexandre
+    public function searchAction($nom)
+    {
+        $repository = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository('OCPlatformBundle:Advert')
+        ;
+
+        $Advert = $repository->myFind($nom);
+
+
+        return $this->render('OCPlatformBundle:Advert:search.html.twig', array(
+            'Advert' => $Advert
+
+        ));
+    }
+
+    public function listeAction()
+    {
+        $listAdverts = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository('OCPlatformBundle:Advert')
+            ->getAdvertWithApplications();
+
+        foreach ($listAdverts as $advert) {
+            // Ne déclenche pas de requête : les candidatures sont déjà chargées !
+            // Vous pourriez faire une boucle dessus pour les afficher toutes
+            $advert->getApplications();
+        }
+
+        $repository = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository('OCPlatformBundle:Advert')
+            //->getAdvertWithCategories(array('Développeur', 'Intégrateur'))
+
+        ;
+
+        /*foreach ($repository as $advertAvecCategorie){
+            $advertAvecCategorie->getAdvert();
+        }*/
+        $advertAvecCategorie=$repository->getAdvertWithCategories(['Développement web', 'Développement mobile']);
+
+
+
+
+
+        return $this->render('OCPlatformBundle:Advert:liste.html.twig', array(
+            'advert' => $advert,
+            'avertAvecCategorie' => $advertAvecCategorie
+
+        ));
+    }
+
+    //http://localhost/Symfony/web/app_dev.php/platform/derniere/2
+    public function derniereAction($limit)
+    {
+
+
+        $repository = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository('OCPlatformBundle:Advert')
+            //->getAdvertWithCategories(array('Développeur', 'Intégrateur'))
+
+        ;
+
+        $xDernieresAdvertAvecCategorie=$repository->getApplicationsWithAdvert($limit);
+
+
+
+        return $this->render('OCPlatformBundle:Advert:liste.html.twig', array(
+            'xDernieresAdvertAvecCategorie' => $xDernieresAdvertAvecCategorie
+
+        ));
+    }
+
+
 
 
 

@@ -9,7 +9,7 @@ http://twig.sensiolabs.org/doc/2.x/tests/index.html
 http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/index.html
 https://secure.php.net/manual/fr/language.oop5.magic.php
 Query builder :https://openclassrooms.com/courses/developpez-votre-site-web-avec-le-framework-symfony/recuperer-ses-entites-avec-doctrine2-1
-
+requete dql : http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/dql-doctrine-query-language.html
 //Sombox
 http://frontend.sombox.fr/app_dev.php
 
@@ -58,6 +58,8 @@ psw : NQfUFcrT6G1O
 	A FAIRE A CHAQUE MODIF :
 	enregistrer schema en bdd : php bin/console doctrine:schema:update --dump-sql
 	php bin/console doctrine:schema:update --force
+
+	tester requetes : php bin/console doctrine:query:dql "SELECT a FROM OCPlatformBundle:Advert a"
 	
 	//controller
 	récupérer le contenu d'un template est la méthode : $this->get('templating')->render()
@@ -75,6 +77,9 @@ psw : NQfUFcrT6G1O
 	//Doctrine : http://symfony.com/doc/current/bundles/DoctrineFixturesBundle/index.html
 	//si pb de variable globale après composer
 	app_webmaster: Fabien
+
+	//Query Builder
+	aller voir dans AdvertRepository
 
 //serveur local : run-easyphp-devserver 
 http://127.0.0.1:1111/

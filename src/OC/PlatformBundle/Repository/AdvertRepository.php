@@ -85,4 +85,103 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
             ->setParameter('end',   new \Datetime(date('Y').'-12-31'))  // Et le 31 décembre de cette année
         ;
     }
+
+    //http://localhost/Symfony/web/app_dev.php/platform/search/alexandre
+    public function myFind($nom)
+    {
+        $qb = $this->createQueryBuilder('a');
+
+        // On peut ajouter ce qu'on veut avant
+        $qb
+            ->where('a.author = :author')
+            ->setParameter('author', $nom)
+        ;
+
+        // On applique notre condition sur le QueryBuilder
+        //$this->whereCurrentYear($qb);
+
+        // On peut ajouter ce qu'on veut après
+        $qb->orderBy('a.date', 'DESC');
+
+        return $qb
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function myFindAllDQL()
+    {
+        $query = $this->_em->createQuery('SELECT a FROM OCPlatformBundle:Advert a');
+        $results = $query->getResult();
+
+        return $results;
+    }
+    //test de la requete en console : php bin/console doctrine:query:dql "SELECT a FROM OCPlatformBundle:Advert a"
+    //test de la requete en console : php bin/console doctrine:query:dql "SELECT a, u FROM OCPlatformBundle:Advert a JOIN a.user u WHERE u.age = 25"
+    //test de la requete en console : php bin/console doctrine:query:dql "SELECT a.title FROM OCPlatformBundle:Advert a WHERE a.id IN(1, 3, 5)"
+
+
+    public function getAdvertWithApplications()
+    {
+        $qb = $this
+            ->createQueryBuilder('a')
+            ->leftJoin('a.applications', 'app')
+            ->addSelect('app')
+        ;
+
+        return $qb
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+    // la relation entreAdvert etApplication est une Many-To-One avecApplication du côté Many, le côté propriétaire donc.
+    // Cela veut dire que pour pouvoir faire la jointure dans ce sens, la relation est bidirectionnelle, afin d'ajouter
+    // un attribut applications dans l'entité inverseAdvert. C'est ce que nous avons fait à la fin du chapitre précédent.
+
+    // sinon partir d'application (si pas bidirectionelle)
+
+    //personnaliser condition de jointure
+    //$qb->innerJoin('a.applications', 'app', 'WITH', 'YEAR(app.date) > 2013')
+
+
+    //récupérer toutes les annonces qui correspondent à une liste de catégories
+    public function getAdvertWithCategories(array $categoryNames)
+    {
+
+        $qb = $this
+            ->createQueryBuilder('a')
+            ->innerJoin('a.categories', 'cat')
+            ->addSelect('cat')
+        ;
+
+        // Puis on filtre sur le nom des catégories à l'aide d'un IN
+        $qb->where(
+            $qb->expr()->in('cat.name', $categoryNames)
+        );
+
+        return $qb
+            ->getQuery()
+            ->getResult()
+            ;
+
+    }
+
+    //récupérer les X dernières candidatures avec leur annonce associée
+    public function getApplicationsWithAdvert($limit){
+
+        $qb = $this
+            ->createQueryBuilder('a')
+            ->innerJoin('a.applications','app')
+            ->addSelect('app')
+        ;
+
+        // Puis on ne retourne que $limit résultats
+        $qb->setMaxResults($limit);
+
+        return $qb
+            ->getQuery()
+            ->getResult()
+            ;
+
+    }
 }

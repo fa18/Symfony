@@ -43,6 +43,23 @@ oc_platform_email:
         _controller: OCPlatformBundle:Advert:email
 
 oc_platform_test:
-   path:      /test
+   path:      /test/{id}
    defaults:
         _controller: OCPlatformBundle:Advert:test
+
+oc_platform_search:
+   path:      /search/{nom}
+   defaults:
+        _controller: OCPlatformBundle:Advert:search
+
+oc_platform_liste:
+   path:      /liste
+   defaults:
+        _controller: OCPlatformBundle:Advert:liste
+
+oc_platform_derniere:
+   path:      /derniere/{limit}
+   defaults:
+        _controller: OCPlatformBundle:Advert:derniere
+   requirements:
+           limit : \d+
